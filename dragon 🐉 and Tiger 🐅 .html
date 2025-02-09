@@ -1,0 +1,251 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon vs. Tiger - Premium</title>
+    <style>
+        /* Neon Cyberpunk Background */
+        body {
+            background: linear-gradient(45deg, #000428, #004e92);
+            background-size: 400% 400%;
+            animation: neonBG 6s infinite alternate;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+        }
+
+        @keyframes neonBG {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* Stylish Welcome Message */
+        .welcome {
+            font-size: 22px;
+            font-weight: bold;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 0px 15px rgba(255, 0, 255, 0.6);
+            animation: fadeIn 3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Glassmorphism Cards */
+        .card {
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px;
+            width: 250px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 30px rgba(0, 255, 255, 0.5);
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        h2 {
+            color: #00ffff;
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 2px solid #00ffff;
+            border-radius: 5px;
+            text-align: center;
+            background: black;
+            color: white;
+            font-size: 18px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 18px;
+            background: #00ffff;
+            color: black;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0px 0px 10px #00ffff;
+        }
+
+        button:hover {
+            background: #ff0077;
+            box-shadow: 0px 0px 15px #ff0077;
+        }
+
+        /* Result Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: black;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0px 0px 15px #00ffff;
+        }
+
+        .close {
+            float: right;
+            font-size: 20px;
+            cursor: pointer;
+            color: #00ffff;
+        }
+
+        .winner-text {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ffff;
+            color: #00ffff;
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            margin-top: 20px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        .leaderboard h3 {
+            color: #ff0077;
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            font-size: 14px;
+            text-align: center;
+            color: #ffcc00;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Welcome Message -->
+    <div class="welcome" id="welcomeMessage">
+        <script>
+            setTimeout(() => {
+                document.getElementById("welcomeMessage").innerText = "🔥 Raj - The King of Dragon Tiger 🔥";
+            }, 1000);
+        </script>
+    </div>
+
+    <div class="card">
+        <h2>Dragon 🐉</h2>
+        <input type="number" id="dragonNumber" placeholder="Dragon's number">
+    </div>
+
+    <div class="card">
+        <h2>Tiger 🐅</h2>
+        <input type="number" id="tigerNumber" placeholder="Tiger's number">
+    </div>
+
+    <div class="button-container">
+        <button onclick="calculateResult()">🎲 Reveal Winner</button>
+        <button onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Result</h2>
+            <p id="modalResult" class="winner-text"></p>
+        </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="leaderboard">
+        <h3>🏆 Leaderboard</h3>
+        <p>Dragon Wins: <span id="dragonWins">0</span></p>
+        <p>Tiger Wins: <span id="tigerWins">0</span></p>
+    </div>
+
+    <!-- Footer with your details -->
+    <div class="footer">
+        <p>Made with ❤️ by Raj Verma | Contact: Telegram @cyber_raj1</p>
+    </div>
+
+    <script>
+        let dragonWins = 0;
+        let tigerWins = 0;
+
+        function calculateResult() {
+            const dragonNum = parseFloat(document.getElementById('dragonNumber').value) || 0;
+            const tigerNum = parseFloat(document.getElementById('tigerNumber').value) || 0;
+            const resultValue = Math.abs((dragonNum - tigerNum) * 2);
+            
+            let resultMessage = '';
+
+            if ([0, 2, 8, 12, 14, 22, 24].includes(resultValue)) {
+                resultMessage = "🐅 Tiger Wins!";
+                tigerWins++;
+            } else if ([4, 6, 10, 16, 18, 20].includes(resultValue)) {
+                resultMessage = "🐉 Dragon Wins!";
+                dragonWins++;
+            } else {
+                resultMessage = "No Winner";
+            }
+
+            document.getElementById('modalResult').innerText = resultMessage;
+            document.getElementById('resultModal').style.display = "flex";
+
+            document.getElementById('dragonWins').innerText = dragonWins;
+            document.getElementById('tigerWins').innerText = tigerWins;
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').style.display = "none";
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+    </script>
+
+</body>
+</html>
